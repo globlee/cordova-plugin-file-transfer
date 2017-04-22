@@ -205,12 +205,10 @@ static CFIndex WriteDataToStream(NSData* data, CFWriteStreamRef stream)
             val = [val stringValue];
         }
 
-        // if it is a valid json object get the NSString representation
         if ([NSJSONSerialization isValidJSONObject:val]){
-            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:val options:0 error:nil];
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:val options:NSJSONWritingPrettyPrinted error:nil];
             val = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
         }
-
 
         // finally, check whether it is a NSString (for dataUsingEncoding selector below)
         if (![val isKindOfClass:[NSString class]]) {
@@ -218,7 +216,7 @@ static CFIndex WriteDataToStream(NSData* data, CFWriteStreamRef stream)
         }
 
         [postBodyBeforeFile appendData:formBoundaryData];
-        [postBodyBeforeFile appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"file.json\"\r\nContent-Type: application/json\r\n\r\n", key] dataUsingEncoding:NSUTF8StringEncoding]];
+        [postBodyBeforeFile appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", key] dataUsingEncoding:NSUTF8StringEncoding]];
         [postBodyBeforeFile appendData:[val dataUsingEncoding:NSUTF8StringEncoding]];
         [postBodyBeforeFile appendData:[@"\r\n" dataUsingEncoding : NSUTF8StringEncoding]];
     }
