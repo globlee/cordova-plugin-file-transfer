@@ -396,11 +396,19 @@ public class FileTransfer extends CordovaPlugin {
                             Object key = iter.next();
                             if(!String.valueOf(key).equals("headers"))
                             {
-                              beforeData.append(LINE_START).append(BOUNDARY).append(LINE_END);
+                             /* beforeData.append(LINE_START).append(BOUNDARY).append(LINE_END);
                               beforeData.append("Content-Disposition: form-data; name=\"").append(key.toString()).append("\";");
                               beforeData.append(" filename=\"").append("file.json").append('"').append(LINE_END);
                               beforeData.append("Content-Type: ").append("application/json").append(LINE_END).append(LINE_END);
+                              beforeData.append(LINE_END);*/
+
+                              beforeData.append(LINE_START).append(BOUNDARY).append(LINE_END);
+                              beforeData.append("Content-Disposition: form-data; name=\"").append(key.toString()).append('"');
+                              beforeData.append(LINE_END).append(LINE_END);
+                              beforeData.append(params.getString(key.toString()));
                               beforeData.append(LINE_END);
+
+
                             }
                         }
                     } catch (JSONException e) {
